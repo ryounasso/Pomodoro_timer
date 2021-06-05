@@ -8,7 +8,7 @@ export default function Home() {
     <div>
       <p>Pomodoro Timer</p>
       <p>{hour}</p>
-      <button>Start</button>
+      <button onClick={() => setHour("30:00")}>Start</button>
     </div>
   );
 }
