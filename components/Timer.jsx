@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 
 export function Timer() {
@@ -9,7 +9,6 @@ export function Timer() {
 
   const countDown = () => {
     let newRestTime = restTime - 1;
-
     return newRestTime;
   };
 
@@ -20,14 +19,15 @@ export function Timer() {
     setHour({ min: minutes, sec: seconds });
   };
 
-  let id;
-  if (isRun) {
-    id = setInterval(() => {
+  useEffect(() => {
+    const id = setInterval(() => {
       toTime();
     }, 1000);
-  } else {
-    clearInterval(id);
-  }
+    return () => {
+      clearInterval(id);
+    };
+  }, [hour]);
+
   return (
     <div>
       {hour.min} : {hour.sec}
