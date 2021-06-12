@@ -6,13 +6,18 @@ export function Timer() {
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [isRun, setIsRun] = useState(false);
   const [id, setId] = useState();
+  const refHour = useRef(prevTime);
+
+  useEffect(() => {
+    refHour.current = prevTime;
+  }, [prevTime]);
 
   const countDown = () => {
     const restTime = hour.min * 60 + hour.sec;
     let newRestTime = restTime - 1;
     setPrevTime(prevTime - 1);
     console.log("restTime", prevTime);
-    return newRestTime;
+    return prevTime;
   };
 
   const toTime = () => {
