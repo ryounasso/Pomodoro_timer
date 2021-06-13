@@ -4,7 +4,6 @@ import { Button } from "@chakra-ui/react";
 export function Timer() {
   const [hour, setHour] = useState({ min: 30, sec: 0 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
-  const [isRun, setIsRun] = useState(false);
   const [id, setId] = useState();
   const refHour = useRef(prevTime);
 
@@ -12,54 +11,34 @@ export function Timer() {
     refHour.current = prevTime;
   }, [prevTime]);
 
+  //   useEffect(() => {
+  //     setId(setInterval(countDown, 1000));
+  //   }, []);
+
   const countDown = () => {
-    const restTime = hour.min * 60 + hour.sec;
-    let newRestTime = restTime - 1;
-    setPrevTime(prevTime - 1);
-    console.log("restTime", prevTime);
-    return prevTime;
+    setPrevTime(refHour.current - 1);
+    console.log(prevTime);
   };
 
-  const toTime = () => {
-    const time = countDown();
+  const toTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    setHour({ min: minutes, sec: seconds });
-    console.log("time", time);
-    console.log(hour);
+    return minutes + ":" + seconds;
   };
 
   const start = () => {
-    if (!isRun) {
-      setId(setInterval(toTime, 1000));
-      setIsRun(true);
-    }
-    console.log(isRun);
+    setId(setInterval(countDown, 1000));
   };
 
   const stop = () => {
-    if (isRun) {
-      clearInterval(id);
-      setIsRun(false);
-    }
-    console.log("stop", prevTime);
+    clearInterval(id);
   };
-
-  useEffect(() => {
-    if (!isRun) {
-      setId(setInterval(toTime, 1000));
-    } else {
-      clearInterval(id);
-    }
-    console.log(isRun);
-    return () => clearInterval(id);
-  }, [isRun]);
 
   return (
     <div>
-      {hour.min} : {hour.sec}
-      <Button onClick={() => setIsRun(true)}>Start</Button>
-      <Button onClick={() => setIsRun(false)}>Stop</Button>
+      {toTime(refHour.current)}
+      <Button onClick={() => start()}>Start</Button>
+      <Button onClick={() => stop()}>Stop</Button>
     </div>
   );
 }
