@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "@chakra-ui/react";
+import { Button, Box, Text, Center } from "@chakra-ui/react";
 
 export function Timer() {
   const [hour, setHour] = useState({ min: 30, sec: 0 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
   const refHour = useRef(prevTime);
+  let restTime;
 
   useEffect(() => {
     refHour.current = prevTime;
   }, [prevTime]);
 
-  //   useEffect(() => {
-  //     setId(setInterval(countDown, 1000));
-  //   }, []);
+  useEffect(() => {
+    restTime = toTime(refHour.current);
+  }, [refHour.current]);
 
   const countDown = () => {
     setPrevTime(refHour.current - 1);
-    console.log(prevTime);
   };
 
   const toTime = (time) => {
@@ -34,11 +34,37 @@ export function Timer() {
     clearInterval(id);
   };
 
+  const increment = () => {
+    setPrevTime(refHour.current + 1);
+  };
+
+  const decriment = () => {
+    setPrevTime(refHour.current - 1);
+  };
+
   return (
-    <div>
-      {toTime(refHour.current)}
-      <Button onClick={() => start()}>Start</Button>
-      <Button onClick={() => stop()}>Stop</Button>
-    </div>
+    <Box>
+      <Center>
+        <Text fontSize="5xl" color="gray.600">
+          {restTime}
+        </Text>
+        <Box m={4}>
+          <Button colorScheme="blue" m={2} onClick={() => increment()}>
+            ▲
+          </Button>
+          <Button colorScheme="blue" m={2} onClick={() => decriment()}>
+            ▼
+          </Button>
+        </Box>
+      </Center>
+      <Center>
+        <Button m={4} onClick={() => start()}>
+          Start
+        </Button>
+        <Button m={4} onClick={() => stop()}>
+          Stop
+        </Button>
+      </Center>
+    </Box>
   );
 }
