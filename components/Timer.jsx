@@ -12,10 +12,6 @@ export function Timer() {
     refHour.current = prevTime;
   }, [prevTime]);
 
-  useEffect(() => {
-    restTime = toTime(refHour.current);
-  }, [refHour.current]);
-
   const countDown = () => {
     setPrevTime(refHour.current - 1);
   };
@@ -46,7 +42,7 @@ export function Timer() {
     <Box>
       <Center>
         <Text fontSize="5xl" color="gray.600">
-          {restTime}
+          {toTime(refHour.current)}
         </Text>
         <Box m={4}>
           <Button colorScheme="blue" m={2} onClick={() => increment()}>
