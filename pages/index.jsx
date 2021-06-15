@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { Heading, Center, Box } from "@chakra-ui/react";
 import { Timer } from "../components/Timer";
+import { TrelloCard } from "../components/TrelloCard";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
         <Heading>Pomodoro Timer</Heading>
       </Center>
       <Timer />
+      <TrelloCard />
     </Box>
   );
 }

@@ -2,15 +2,22 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
 
 export function Timer() {
-  const [hour, setHour] = useState({ min: 30, sec: 0 });
+  const [hour, setHour] = useState({ min: 0, sec: 2 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
   const refHour = useRef(prevTime);
-  let restTime;
 
   useEffect(() => {
     refHour.current = prevTime;
+    if (refHour.current === 0) {
+      clearInterval(id);
+      setHour({ min: 5, sec: 0 });
+    }
   }, [prevTime]);
+
+  useEffect(() => {
+    setPrevTime(hour.min * 60 + hour.sec);
+  }, [hour]);
 
   const countDown = () => {
     setPrevTime(refHour.current - 1);
@@ -19,7 +26,11 @@ export function Timer() {
   const toTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return minutes + ":" + seconds;
+    if (String(seconds).length < 2) {
+      return minutes + ":" + "0" + seconds;
+    } else {
+      return minutes + ":" + seconds;
+    }
   };
 
   const start = () => {
@@ -42,7 +53,7 @@ export function Timer() {
     <Box>
       <Center>
         <Text fontSize="5xl" color="gray.600">
-          {toTime(refHour.current)}
+          {toTime(prevTime)}
         </Text>
         <Box m={4}>
           <Button colorScheme="blue" m={2} onClick={() => increment()}>
