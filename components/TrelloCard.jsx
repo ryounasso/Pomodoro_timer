@@ -33,8 +33,6 @@ export function TrelloCard() {
     fetchar
   );
 
-  console.log(data);
-
   if (error) return <div>failed to load</div>;
   if (!data)
     return (
@@ -50,6 +48,10 @@ export function TrelloCard() {
     );
   return (
     <div>
+      {data.map((oneDate) => {
+        <Card name={oneDate.name} />;
+        console.log(oneDate.name);
+      })}
       <Card name={data[0].name} />
     </div>
   );
