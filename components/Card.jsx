@@ -5,7 +5,7 @@ export function Card(props) {
   const name = props.name;
 
   return (
-    <Box borderWidth={2} p={4} maxW="200px" bg="#c0c0c0" mx="auto">
+    <Box p={4} maxW="200px" bg="#f5f5f5">
       <Text>{name}</Text>
       <Button colorScheme="green">Done!!</Button>
     </Box>

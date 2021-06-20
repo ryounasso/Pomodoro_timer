@@ -7,12 +7,14 @@ import { TrelloCard } from "../components/TrelloCard";
 
 export default function Home() {
   return (
-    <Box bg="#f5f5f5">
+    <Box>
       <Center>
         <Heading>Pomodoro Timer</Heading>
       </Center>
       <Timer />
-      <TrelloCard />
+      <Center>
+        <TrelloCard />
+      </Center>
     </Box>
   );
 }

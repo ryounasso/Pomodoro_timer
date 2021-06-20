@@ -1,7 +1,7 @@
 import React from "react";
 import useSWR from "swr";
 import Loader from "react-loader-spinner";
-import { Center } from "@chakra-ui/react";
+import { Center, HStack } from "@chakra-ui/react";
 import axios from "axios";
 import { Card } from "./Card";
 
@@ -46,13 +46,12 @@ export function TrelloCard() {
         />
       </Center>
     );
+
   return (
-    <div>
+    <HStack>
       {data.map((oneDate) => {
-        <Card name={oneDate.name} />;
-        console.log(oneDate.name);
+        return <Card key={oneDate.id} name={oneDate.name} />;
       })}
-      <Card name={data[0].name} />
-    </div>
+    </HStack>
   );
 }
