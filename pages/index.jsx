@@ -12,7 +12,7 @@ export default function Home() {
         <Heading>Pomodoro Timer</Heading>
       </Center>
       <Timer />
-      <Center>
+      <Center marginY={8}>
         <TrelloCard />
       </Center>
     </Box>

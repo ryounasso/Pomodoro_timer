@@ -5,9 +5,9 @@ export function Card(props) {
   const name = props.name;
 
   return (
-    <Box p={4} maxW="200px" bg="#f5f5f5">
+    <Box p={4} maxW="200px" bg="#A2DBFA" borderRadius="md">
       <Text>{name}</Text>
-      <Button colorScheme="green">Done!!</Button>
+      <Button bg="#E8F0F2">Done!!</Button>
     </Box>
   );
 }
