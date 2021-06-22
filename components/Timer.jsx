@@ -56,19 +56,19 @@ export function Timer() {
           {toTime(prevTime)}
         </Text>
         <Box m={4}>
-          <Button bg="#39A2DB" color="white" m={2} onClick={() => increment()}>
+          <Button bg="#2541B2" color="white" m={2} onClick={() => increment()}>
             ▲
           </Button>
-          <Button bg="#39A2DB" color="white" m={2} onClick={() => decriment()}>
+          <Button bg="#2541B2" color="white" m={2} onClick={() => decriment()}>
             ▼
           </Button>
         </Box>
       </Center>
       <Center>
-        <Button m={4} bg="#053742" color="white" onClick={() => start()}>
+        <Button m={4} bg="#1768AC" color="white" onClick={() => start()}>
           Start
         </Button>
-        <Button m={4} bg="#053742" color="white" onClick={() => stop()}>
+        <Button m={4} bg="#1768AC" color="white" onClick={() => stop()}>
           Stop
         </Button>
       </Center>
