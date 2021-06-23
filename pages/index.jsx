@@ -4,6 +4,7 @@ import React from "react";
 import { Heading, Center, Box } from "@chakra-ui/react";
 import { Timer } from "../components/Timer";
 import { TrelloCard } from "../components/TrelloCard";
+import { Calendar } from "../components/Calendar";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       <Timer />
       <Center marginY={8}>
         <TrelloCard />
+        <Calendar />
       </Center>
     </Box>
   );
