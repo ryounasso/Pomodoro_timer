@@ -1,10 +1,19 @@
-import ApiCalendar from "react-google-calendar-api";
-import React from "react";
+import React, { useEffect } from "react";
+// import ScriptTag from "react-script-tag";
 
 export function Calendar() {
   let googleAuth;
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://apis.google.com/js/api.js";
+    script.async = true;
+    script.onload = "this.onload=function(){};handleClientLoad()";
+    document.body.appendChild(script);
+  }, []);
+
   function initClient() {
+    gapi.load("client:auth2", initClient);
     gapi.client
       .init({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_APIKEY,
@@ -19,6 +28,8 @@ export function Calendar() {
 
         // Listen for sign-in state changes.
         GoogleAuth.isSignedIn.listen(updateSigninStatus);
+
+        console.log("success");
       });
   }
 
@@ -48,7 +59,7 @@ export function Calendar() {
 
   return (
     <div>
-      <button onClick={() => getEvents()}>Get</button>
+      <button onClick={() => initClient()}>Get</button>
     </div>
   );
 }
