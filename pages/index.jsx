@@ -28,7 +28,9 @@ export default function Home() {
       <Center>
         {username === process.env.NEXT_PUBLIC_USERNAME ? (
           <Link href="/main">Mainへ</Link>
-        ) : null}
+        ) : (
+          <div>Please other username</div>
+        )}
       </Center>
     </Box>
   );
