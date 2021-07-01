@@ -15,6 +15,8 @@ export default function Main() {
       <Timer />
       <Center marginY={8}>
         <TrelloCard />
+      </Center>
+      <Center marginY={8}>
         <Calendar />
       </Center>
     </Box>

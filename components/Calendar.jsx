@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Heading, Center, Box, Button } from "@chakra-ui/react";
 
 export function Calendar() {
+  const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://apis.google.com/js/api.js";
@@ -32,6 +34,7 @@ export function Calendar() {
           // GoogleAuth = gapi.auth2.getAuthInstance();
           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
           updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          handleAuthClick();
 
           // Listen for sign-in state changes.
           // GoogleAuth.isSignedIn.listen(updateSigninStatus);
@@ -60,12 +63,12 @@ export function Calendar() {
   }
 
   function updateSigninStatus(isSignedIn) {
+    console.log(isSignedIn);
     if (isSignedIn) {
       isAuthorized = true;
       if (currentApiRequest) {
         sendAuthorizedApiRequest(currentApiRequest);
       }
-      listUpcomingEvents();
       console.log("true");
     } else {
       isAuthorized = false;
@@ -75,6 +78,7 @@ export function Calendar() {
 
   function handleAuthClick(event) {
     gapi.auth2.getAuthInstance().signIn();
+    setIsLogin(true);
   }
 
   function handleSignoutClick() {
@@ -90,19 +94,23 @@ export function Calendar() {
 
   function listUpcomingEvents() {
     console.log("イベントとってくるでー");
+    const currentTime = new Date();
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(currentTime.getDate() + 1);
     gapi.client.calendar.events
       .list({
         calendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,
         // calendarId: "primary",
         timeMin: new Date().toISOString(),
+        timeMax: tomorrowDate.toISOString(),
         showDeleted: false,
         singleEvents: true,
         maxResults: 10,
         orderBy: "startTime",
       })
       .then(function (response) {
-        console.log(response);
         const events = response.result.items;
+        console.log(events);
         appendPre("Upcoming events:");
 
         if (events.length > 0) {
@@ -121,8 +129,18 @@ export function Calendar() {
   }
 
   return (
-    <div>
-      <button onClick={() => handleClientLoad()}>Get</button>
-    </div>
+    <Box>
+      <Center>
+        <Heading>Schedule</Heading>
+      </Center>
+      <Center>
+        {isLogin ? null : (
+          <Button onClick={() => handleClientLoad()}>Login</Button>
+        )}
+        {isLogin ? (
+          <Button onClick={() => listUpcomingEvents()}>Get</Button>
+        ) : null}
+      </Center>
+    </Box>
   );
 }
