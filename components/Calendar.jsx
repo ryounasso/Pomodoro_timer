@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Heading, Center, Box, Button } from "@chakra-ui/react";
+import { Schedule } from "./Schedule";
 
 export function Calendar() {
   const [isLogin, setIsLogin] = useState(false);
+  const [isEvents, setIsEvents] = useState(false);
+  const [events, setEvents] = useState("");
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://apis.google.com/js/api.js";
@@ -38,7 +42,6 @@ export function Calendar() {
 
           // Listen for sign-in state changes.
           // GoogleAuth.isSignedIn.listen(updateSigninStatus);
-          console.log("success");
         },
         function (error) {
           appendPre(JSON.stringify(error, null, 2));
@@ -63,16 +66,13 @@ export function Calendar() {
   }
 
   function updateSigninStatus(isSignedIn) {
-    console.log(isSignedIn);
     if (isSignedIn) {
       isAuthorized = true;
       if (currentApiRequest) {
         sendAuthorizedApiRequest(currentApiRequest);
       }
-      console.log("true");
     } else {
       isAuthorized = false;
-      console.log("false");
     }
   }
 
@@ -93,7 +93,6 @@ export function Calendar() {
   }
 
   function listUpcomingEvents() {
-    console.log("イベントとってくるでー");
     const currentTime = new Date();
     const tomorrowDate = new Date();
     tomorrowDate.setDate(currentTime.getDate() + 1);
@@ -109,22 +108,22 @@ export function Calendar() {
         orderBy: "startTime",
       })
       .then(function (response) {
-        const events = response.result.items;
-        console.log(events);
+        setEvents(response.result.items);
+        setIsEvents(true);
         appendPre("Upcoming events:");
 
-        if (events.length > 0) {
-          for (let i = 0; i < events.length; i++) {
-            const event = events[i];
-            let when = event.start.dateTime;
-            if (!when) {
-              when = event.start.date;
-            }
-            appendPre(event.summary + " (" + when + ")");
-          }
-        } else {
-          appendPre("No upcoming events found.");
-        }
+        // if (events.length > 0) {
+        //   for (let i = 0; i < events.length; i++) {
+        //     const event = events[i];
+        //     let when = event.start.dateTime;
+        //     if (!when) {
+        //       when = event.start.date;
+        //     }
+        //     // appendPre(event.summary + " (" + when + ")");
+        //   }
+        // } else {
+        //   appendPre("No upcoming events found.");
+        // }
       });
   }
 
@@ -140,6 +139,9 @@ export function Calendar() {
         {isLogin ? (
           <Button onClick={() => listUpcomingEvents()}>Get</Button>
         ) : null}
+      </Center>
+      <Center marginTop={4}>
+        {isEvents ? <Schedule events={events} /> : null}
       </Center>
     </Box>
   );
