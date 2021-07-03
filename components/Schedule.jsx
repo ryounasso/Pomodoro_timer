@@ -12,7 +12,9 @@ export function Schedule(props) {
               {one_event.start.dateTime.substr(11, 5)} 〜{" "}
               {one_event.end.dateTime.substr(11, 5)}
             </Text>
-            <Heading color="white">{one_event.summary}</Heading>
+            <Text fontSize="3xl" color="white">
+              {one_event.summary}
+            </Text>
           </Box>
         );
       })}

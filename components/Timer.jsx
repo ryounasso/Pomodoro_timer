@@ -5,6 +5,7 @@ export function Timer() {
   const [hour, setHour] = useState({ min: 0, sec: 2 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
+  const [count, setCount] = useState(0);
   const refHour = useRef(prevTime);
 
   useEffect(() => {
