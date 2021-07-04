@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Heading, Center, Box } from "@chakra-ui/react";
 import { Timer } from "../components/Timer";
 import { TrelloCard } from "../components/TrelloCard";

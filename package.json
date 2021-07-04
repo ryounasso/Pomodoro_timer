@@ -13,6 +13,7 @@
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "axios": "^0.21.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "framer-motion": "^4.1.17",
     "gapi-script": "^1.2.0",
     "moment": "^2.29.1",

@@ -1,23 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Box, Text, Center } from "@chakra-ui/react";
+import { parseCookies, setCookie } from "nookies";
+import { useRecoilState, atom } from "recoil";
+import { countState } from "../pages/index";
 
-export function Timer() {
+export function Timer(props) {
   const [hour, setHour] = useState({ min: 0, sec: 2 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
   const [count, setCount] = useState(0);
   const refHour = useRef(prevTime);
+  const [myCookie, setMyCookie] = useState(null);
+  const [counts, setCounts] = useRecoilState(countState);
+
+  // useEffect(() => {
+
+  //   console.log(counts);
+  // }, []);
 
   useEffect(() => {
     refHour.current = prevTime;
     if (refHour.current === 0) {
+      setCount(count + 1);
       clearInterval(id);
-      setHour({ min: 5, sec: 0 });
+      setHour({ min: 1, sec: 0 });
     }
   }, [prevTime]);
 
   useEffect(() => {
     setPrevTime(hour.min * 60 + hour.sec);
+    setCounts(setCookies(null, count));
   }, [hour]);
 
   const countDown = () => {
@@ -50,6 +62,13 @@ export function Timer() {
     setPrevTime(refHour.current - 1);
   };
 
+  function setCookies(ctx, token) {
+    setCookie(ctx, "cookie", token, { maxAge: 24 * 60 * 60 });
+    // const cookies = parseCookies();
+    // setMyCookie(parseCookies());
+    console.log(myCookie);
+  }
+
   return (
     <Box>
       <Center>
@@ -64,6 +83,7 @@ export function Timer() {
             ▼
           </Button>
         </Box>
+        {/* <Text>{myCookie !== null ? myCookie.cookie : null}</Text> */}
       </Center>
       <Center>
         <Button m={4} bg="#1768AC" color="white" onClick={() => start()}>

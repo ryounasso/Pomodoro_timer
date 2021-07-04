@@ -8,8 +8,9 @@ export function PersistenceObserver(prop) {
       isModified: true,
     })) {
       const atomLoadable = snapshot.getLoadable(modifiedAtom);
+      console.log(atomLoadable);
       if (atomLoadable.state === "hasValue") {
-        setCookie(prop.ctx, "user", JSON.stringify(atomLoadable.contents), {
+        setCookie(prop.ctx, "count", JSON.stringify(atomLoadable.contents), {
           path: "/",
         });
       }

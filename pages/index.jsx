@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { parseCookies } from "nookies";
 import {
   Center,
   Box,
@@ -11,10 +12,27 @@ import {
   Input,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { atom, useRecoilState } from "recoil";
+
+export const countState = atom({
+  key: "count",
+  default: 0,
+});
 
 export default function Home() {
   const [username, setUserName] = useState("");
   const handleChange = (event) => setUserName(event.target.value);
+  const [myCount, setMyCount] = useRecoilState(countState);
+
+  useEffect(() => {
+    getCookie();
+  }, []);
+
+  function getCookie(ctx) {
+    const cookie = parseCookies(ctx);
+    setMyCount(cookie);
+    console.log(myCount);
+  }
 
   return (
     <Box>
