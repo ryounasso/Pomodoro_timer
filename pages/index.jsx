@@ -26,6 +26,7 @@ export default function Home() {
 
   useEffect(() => {
     getCookie();
+    console.log(myCount);
   }, []);
 
   function getCookie(ctx) {

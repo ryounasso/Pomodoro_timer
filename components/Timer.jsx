@@ -8,28 +8,25 @@ export function Timer(props) {
   const [hour, setHour] = useState({ min: 0, sec: 2 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
-  const [count, setCount] = useState(0);
+  const [myCount, setCount] = useState(0);
   const refHour = useRef(prevTime);
   const [myCookie, setMyCookie] = useState(null);
   const [counts, setCounts] = useRecoilState(countState);
 
-  // useEffect(() => {
-
-  //   console.log(counts);
-  // }, []);
-
   useEffect(() => {
     refHour.current = prevTime;
     if (refHour.current === 0) {
-      setCount(count + 1);
+      setCount(myCount + 1);
       clearInterval(id);
-      setHour({ min: 1, sec: 0 });
+      setHour({ min: 0, sec: 5 });
+      setCookies(null, Number(counts.cookie) + 1);
     }
   }, [prevTime]);
 
   useEffect(() => {
     setPrevTime(hour.min * 60 + hour.sec);
-    setCounts(setCookies(null, count));
+    setMyCookie(counts);
+    setCounts(counts);
   }, [hour]);
 
   const countDown = () => {
@@ -48,6 +45,7 @@ export function Timer(props) {
 
   const start = () => {
     setId(setInterval(countDown, 1000));
+    getCookie();
   };
 
   const stop = () => {
@@ -62,11 +60,19 @@ export function Timer(props) {
     setPrevTime(refHour.current - 1);
   };
 
+  function getCookie(ctx) {
+    const cookie = parseCookies(ctx);
+    setCounts(cookie);
+    console.log("普通にタイマーの回数", myCount);
+  }
+
   function setCookies(ctx, token) {
-    setCookie(ctx, "cookie", token, { maxAge: 24 * 60 * 60 });
+    setCookie(ctx, "cookie", token, { maxAge: 1 * 60 * 60 });
     // const cookies = parseCookies();
     // setMyCookie(parseCookies());
-    console.log(myCookie);
+    console.log("recoilで共有しとる値", counts);
+    console.log("cookieを複製", myCookie);
+    console.log("タイマーの回数", myCount);
   }
 
   return (
@@ -75,6 +81,7 @@ export function Timer(props) {
         <Text fontSize="5xl" color="gray.600">
           {toTime(prevTime)}
         </Text>
+        {counts.cookie}
         <Box m={4}>
           <Button bg="#2541B2" color="white" m={2} onClick={() => increment()}>
             ▲
