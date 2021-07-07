@@ -3,6 +3,7 @@ import { Button, Box, Text, Center } from "@chakra-ui/react";
 import { parseCookies, setCookie } from "nookies";
 import { useRecoilState, atom } from "recoil";
 import { countState } from "../pages/index";
+import { PieChart, Pie, Cell } from "recharts";
 
 export function Timer(props) {
   const [hour, setHour] = useState({ min: 0, sec: 2 });
@@ -14,12 +15,18 @@ export function Timer(props) {
   const [counts, setCounts] = useRecoilState(countState);
 
   useEffect(() => {
+    getCookie();
+    setCounts(counts);
+    console.log("リロードされた時");
+  }, []);
+
+  useEffect(() => {
     refHour.current = prevTime;
     if (refHour.current === 0) {
       setCount(myCount + 1);
       clearInterval(id);
       setHour({ min: 0, sec: 5 });
-      setCookies(null, Number(counts.cookie) + 1);
+      setCookies(null, Number(counts.count) + 1);
     }
   }, [prevTime]);
 
@@ -67,13 +74,17 @@ export function Timer(props) {
   }
 
   function setCookies(ctx, token) {
-    setCookie(ctx, "cookie", token, { maxAge: 1 * 60 * 60 });
+    setCookie(ctx, "count", token, { maxAge: 1 * 60 * 60 });
     // const cookies = parseCookies();
     // setMyCookie(parseCookies());
-    console.log("recoilで共有しとる値", counts);
-    console.log("cookieを複製", myCookie);
-    console.log("タイマーの回数", myCount);
   }
+
+  const data = [
+    { name: 0, value: Number(counts.count) },
+    { name: 1, value: 40 - Number(counts.count) },
+  ];
+
+  const colors = ["#3D84B8", "white"];
 
   return (
     <Box>
@@ -81,7 +92,6 @@ export function Timer(props) {
         <Text fontSize="5xl" color="gray.600">
           {toTime(prevTime)}
         </Text>
-        {counts.cookie}
         <Box m={4}>
           <Button bg="#2541B2" color="white" m={2} onClick={() => increment()}>
             ▲
@@ -90,7 +100,21 @@ export function Timer(props) {
             ▼
           </Button>
         </Box>
-        {/* <Text>{myCookie !== null ? myCookie.cookie : null}</Text> */}
+        <Text>{counts.count}</Text>
+        <PieChart width={150} height={150}>
+          <Pie
+            data={data}
+            dataKey="value"
+            x="50%"
+            cy="50%"
+            outerRadius={50}
+            fill="#8884d8"
+          >
+            {data.map((entry, index) => {
+              <Cell key={`cell-${index}`} fill={colors[index]} />;
+            })}
+          </Pie>
+        </PieChart>
       </Center>
       <Center>
         <Button m={4} bg="#1768AC" color="white" onClick={() => start()}>

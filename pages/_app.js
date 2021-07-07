@@ -15,10 +15,11 @@ function MyApp({ Component, pageProps, ctx }) {
     }
   };
   return (
-    <RecoilRoot initializeState={initializeState}>
+    // <RecoilRoot initializeState={initializeState}>
+    <RecoilRoot>
       <ChakraProvider>
         <Component {...pageProps} />
-        <PersistenceObserver ctx={ctx} />
+        {/* <PersistenceObserver ctx={ctx} /> */}
       </ChakraProvider>
     </RecoilRoot>
   );

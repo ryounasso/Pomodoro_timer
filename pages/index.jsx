@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { parseCookies } from "nookies";
+import { parseCookies, setCookie } from "nookies";
 import {
   Center,
   Box,
@@ -26,13 +26,27 @@ export default function Home() {
 
   useEffect(() => {
     getCookie();
-    console.log(myCount);
+    console.log(getCookie());
+    console.log("今はとりあえずここの値を知りたい", myCount);
   }, []);
 
   function getCookie(ctx) {
     const cookie = parseCookies(ctx);
     setMyCount(cookie);
     console.log(myCount);
+    // setCookies(null, 0);
+  }
+
+  function setCookies(ctx, token) {
+    setCookie(ctx, "count", token, { maxAge: 1 * 60 * 60 });
+    // const cookies = parseCookies();
+    // setMyCookie(parseCookies());
+  }
+
+  function prepareCookie() {
+    if (!myCount.count || myCount.count === "NaN") {
+      setCookies(null, 0);
+    }
   }
 
   return (
@@ -46,7 +60,9 @@ export default function Home() {
       </Center>
       <Center>
         {username === process.env.NEXT_PUBLIC_USERNAME ? (
-          <Link href="/main">Mainへ</Link>
+          <Link href="/main" onClick={prepareCookie()}>
+            Mainへ
+          </Link>
         ) : (
           <div>Please other username</div>
         )}
