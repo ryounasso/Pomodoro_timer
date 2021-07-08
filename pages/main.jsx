@@ -13,10 +13,10 @@ export default function Main() {
         <Heading>Pomodoro Timer</Heading>
       </Center>
       <Timer />
-      <Center marginY={8}>
+      <Center marginY={14}>
         <TrelloCard />
       </Center>
-      <Center marginY={8}>
+      <Center marginY={14}>
         <Calendar />
       </Center>
     </Box>

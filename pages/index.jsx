@@ -27,7 +27,6 @@ export default function Home() {
   useEffect(() => {
     getCookie();
     console.log(getCookie());
-    console.log("今はとりあえずここの値を知りたい", myCount);
   }, []);
 
   function getCookie(ctx) {

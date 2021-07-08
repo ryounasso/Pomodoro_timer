@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Box, Text, Center } from "@chakra-ui/react";
+import { Button, Box, Text, Center, VStack } from "@chakra-ui/react";
 import { parseCookies, setCookie } from "nookies";
 import { useRecoilState, atom } from "recoil";
 import { countState } from "../pages/index";
@@ -70,7 +70,6 @@ export function Timer(props) {
   function getCookie(ctx) {
     const cookie = parseCookies(ctx);
     setCounts(cookie);
-    console.log("普通にタイマーの回数", myCount);
   }
 
   function setCookies(ctx, token) {
@@ -81,10 +80,10 @@ export function Timer(props) {
 
   const data = [
     { name: 0, value: Number(counts.count) },
-    { name: 1, value: 40 - Number(counts.count) },
+    { name: 1, value: 18 - Number(counts.count) },
   ];
 
-  const colors = ["#3D84B8", "white"];
+  const COLORS = ["#3D84B8", "white"];
 
   return (
     <Box>
@@ -100,21 +99,24 @@ export function Timer(props) {
             ▼
           </Button>
         </Box>
-        <Text>{counts.count}</Text>
-        <PieChart width={150} height={150}>
-          <Pie
-            data={data}
-            dataKey="value"
-            x="50%"
-            cy="50%"
-            outerRadius={50}
-            fill="#8884d8"
-          >
-            {data.map((entry, index) => {
-              <Cell key={`cell-${index}`} fill={colors[index]} />;
-            })}
-          </Pie>
-        </PieChart>
+        <VStack>
+          <PieChart width={150} height={100}>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              x="50%"
+              cy="50%"
+              outerRadius={50}
+              fill="#8884d8"
+            >
+              {data.map((item, index) => {
+                return <Cell key={index} fill={COLORS[index]} />;
+              })}
+            </Pie>
+          </PieChart>
+          <Text fontSize="3xl">{counts.count}</Text>
+        </VStack>
       </Center>
       <Center>
         <Button m={4} bg="#1768AC" color="white" onClick={() => start()}>
