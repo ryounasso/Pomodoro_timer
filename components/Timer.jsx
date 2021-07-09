@@ -5,28 +5,39 @@ import { useRecoilState, atom } from "recoil";
 import { countState } from "../pages/index";
 import { PieChart, Pie, Cell } from "recharts";
 
-export function Timer(props) {
-  const [hour, setHour] = useState({ min: 0, sec: 2 });
+export function Timer() {
+  const [hour, setHour] = useState({ min: 0, sec: 10 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
   const [myCount, setCount] = useState(0);
   const refHour = useRef(prevTime);
   const [myCookie, setMyCookie] = useState(null);
   const [counts, setCounts] = useRecoilState(countState);
+  const [isSet, setIsSet] = useState(false);
 
   useEffect(() => {
     getCookie();
-    setCounts(counts);
-    console.log("リロードされた時");
   }, []);
+
+  useEffect(() => {
+    setCount(counts.count);
+    console.log(counts.count);
+  }, [isSet]);
 
   useEffect(() => {
     refHour.current = prevTime;
     if (refHour.current === 0) {
-      setCount(myCount + 1);
-      clearInterval(id);
-      setHour({ min: 0, sec: 5 });
-      setCookies(null, Number(counts.count) + 1);
+      if (Number(counts.count) % 2 === 1) {
+        setCount(Number(myCount) + 1);
+        clearInterval(id);
+        setHour({ min: 0, sec: 5 });
+        setCookies(null, Number(counts.count) + 1);
+      } else {
+        // setCount(myCount + 1);
+        clearInterval(id);
+        setHour({ min: 0, sec: 10 });
+        setCookies(null, Number(counts.count) + 1);
+      }
     }
   }, [prevTime]);
 
@@ -53,6 +64,11 @@ export function Timer(props) {
   const start = () => {
     setId(setInterval(countDown, 1000));
     getCookie();
+    if (!isSet) {
+      if (counts) {
+        setIsSet(true);
+      }
+    }
   };
 
   const stop = () => {
@@ -73,14 +89,25 @@ export function Timer(props) {
   }
 
   function setCookies(ctx, token) {
-    setCookie(ctx, "count", token, { maxAge: 1 * 60 * 60 });
-    // const cookies = parseCookies();
-    // setMyCookie(parseCookies());
+    const date = setExpireDate();
+    setCookie(ctx, "count", token, { expires: date });
+  }
+
+  function setExpireDate() {
+    const currentTime = new Date();
+    const tomorrowDate = new Date(
+      currentTime.getFullYear(),
+      currentTime.getMonth(),
+      currentTime.getDate(),
+      23,
+      59
+    );
+    return tomorrowDate;
   }
 
   const data = [
-    { name: 0, value: Number(counts.count) },
-    { name: 1, value: 18 - Number(counts.count) },
+    { name: 0, value: Number(myCount) },
+    { name: 1, value: 18 - Number(myCount) },
   ];
 
   const COLORS = ["#3D84B8", "white"];
@@ -115,7 +142,7 @@ export function Timer(props) {
               })}
             </Pie>
           </PieChart>
-          <Text fontSize="3xl">{counts.count}</Text>
+          <Text fontSize="3xl">{myCount}</Text>
         </VStack>
       </Center>
       <Center>

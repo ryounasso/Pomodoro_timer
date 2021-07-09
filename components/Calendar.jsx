@@ -94,8 +94,13 @@ export function Calendar() {
 
   function listUpcomingEvents() {
     const currentTime = new Date();
-    const tomorrowDate = new Date();
-    tomorrowDate.setDate(currentTime.getDate() + 1);
+    const tomorrowDate = new Date(
+      currentTime.getFullYear(),
+      currentTime.getMonth(),
+      currentTime.getDate(),
+      23,
+      59
+    );
     gapi.client.calendar.events
       .list({
         calendarId: process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID,

@@ -26,20 +26,16 @@ export default function Home() {
 
   useEffect(() => {
     getCookie();
-    console.log(getCookie());
   }, []);
 
   function getCookie(ctx) {
     const cookie = parseCookies(ctx);
     setMyCount(cookie);
-    console.log(myCount);
     // setCookies(null, 0);
   }
 
   function setCookies(ctx, token) {
     setCookie(ctx, "count", token, { maxAge: 1 * 60 * 60 });
-    // const cookies = parseCookies();
-    // setMyCookie(parseCookies());
   }
 
   function prepareCookie() {
