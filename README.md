@@ -10,3 +10,4 @@
 - nookies
 - trello API
 - google calendar API
+- eslint
