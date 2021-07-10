@@ -42,10 +42,10 @@ export function Calendar() {
 
           // Listen for sign-in state changes.
           // GoogleAuth.isSignedIn.listen(updateSigninStatus);
-        },
-        function (error) {
-          appendPre(JSON.stringify(error, null, 2));
         }
+        // function (error) {
+        //   appendPre(JSON.stringify(error, null, 2));
+        // }
       );
   }
 
@@ -86,11 +86,11 @@ export function Calendar() {
     gapi.auth2.getAuthInstance().signOut();
   }
 
-  function appendPre(message) {
-    const pre = document.getElementById("content");
-    const textContent = document.createTextNode(message + "\n");
-    pre.appendChild(textContent);
-  }
+  // function appendPre(message) {
+  //   const pre = document.getElementById("content");
+  //   const textContent = document.createTextNode(message + "\n");
+  //   pre.appendChild(textContent);
+  // }
 
   function listUpcomingEvents() {
     const currentTime = new Date();
@@ -115,7 +115,7 @@ export function Calendar() {
       .then(function (response) {
         setEvents(response.result.items);
         setIsEvents(true);
-        appendPre("Upcoming events:");
+        // appendPre("Upcoming events:");
 
         // if (events.length > 0) {
         //   for (let i = 0; i < events.length; i++) {
