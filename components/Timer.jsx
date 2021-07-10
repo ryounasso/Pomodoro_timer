@@ -6,36 +6,36 @@ import { countState } from "../pages/index";
 import { PieChart, Pie, Cell } from "recharts";
 
 export function Timer() {
-  const [hour, setHour] = useState({ min: 0, sec: 10 });
+  const [hour, setHour] = useState({ min: 25, sec: 0 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
   const [myCount, setCount] = useState(0);
   const refHour = useRef(prevTime);
-  const [myCookie, setMyCookie] = useState(null);
+  // const [myCookie, setMyCookie] = useState(null);
   const [counts, setCounts] = useRecoilState(countState);
   const [isSet, setIsSet] = useState(false);
 
   useEffect(() => {
     getCookie();
+    setIsSet(true);
   }, []);
 
   useEffect(() => {
-    setCount(counts.count);
-    console.log(counts.count);
+    getCookie();
   }, [isSet]);
 
   useEffect(() => {
     refHour.current = prevTime;
     if (refHour.current === 0) {
-      if (Number(counts.count) % 2 === 1) {
+      if (Number(counts.count) % 2 === 0) {
         setCount(Number(myCount) + 1);
         clearInterval(id);
-        setHour({ min: 0, sec: 5 });
+        setHour({ min: 5, sec: 0 });
         setCookies(null, Number(counts.count) + 1);
       } else {
         // setCount(myCount + 1);
         clearInterval(id);
-        setHour({ min: 0, sec: 10 });
+        setHour({ min: 25, sec: 0 });
         setCookies(null, Number(counts.count) + 1);
       }
     }
@@ -43,7 +43,7 @@ export function Timer() {
 
   useEffect(() => {
     setPrevTime(hour.min * 60 + hour.sec);
-    setMyCookie(counts);
+    // setMyCookie(counts);
     setCounts(counts);
   }, [hour]);
 
@@ -64,11 +64,6 @@ export function Timer() {
   const start = () => {
     setId(setInterval(countDown, 1000));
     getCookie();
-    if (!isSet) {
-      if (counts) {
-        setIsSet(true);
-      }
-    }
   };
 
   const stop = () => {
@@ -106,8 +101,8 @@ export function Timer() {
   }
 
   const data = [
-    { name: 0, value: Number(myCount) },
-    { name: 1, value: 18 - Number(myCount) },
+    { name: 0, value: parseInt(counts.count / 2) },
+    { name: 1, value: 18 - parseInt(counts.count / 2) },
   ];
 
   const COLORS = ["#3D84B8", "white"];
@@ -142,7 +137,9 @@ export function Timer() {
               })}
             </Pie>
           </PieChart>
-          <Text fontSize="3xl">{myCount}</Text>
+          {counts.count === "NaN" ? null : (
+            <Text fontSize="3xl">{parseInt(counts.count / 2)}</Text>
+          )}
         </VStack>
       </Center>
       <Center>
