@@ -24,6 +24,7 @@
     "react-google-calendar-api": "^1.4.0",
     "react-loader-spinner": "^4.0.0",
     "react-script-tag": "^1.1.2",
+    "react-use": "^17.2.4",
     "recharts": "^2.0.9",
     "recoil": "^0.3.1",
     "swiper": "^6.7.0",
