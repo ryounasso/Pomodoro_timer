@@ -1,19 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Box, Text, Center, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  Box,
+  Text,
+  Center,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { parseCookies, setCookie } from "nookies";
-import { useRecoilState, atom } from "recoil";
+import { useRecoilState } from "recoil";
 import { countState } from "../pages/index";
 import { PieChart, Pie, Cell } from "recharts";
+import { TimerModal } from "./TimerModal";
 
 export function Timer() {
-  const [hour, setHour] = useState({ min: 25, sec: 0 });
+  const [hour, setHour] = useState({ min: 0, sec: 2 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
   const [myCount, setCount] = useState(0);
   const refHour = useRef(prevTime);
-  // const [myCookie, setMyCookie] = useState(null);
   const [counts, setCounts] = useRecoilState(countState);
   const [isSet, setIsSet] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     getCookie();
@@ -30,20 +38,20 @@ export function Timer() {
       if (Number(counts.count) % 2 === 0) {
         setCount(Number(myCount) + 1);
         clearInterval(id);
-        setHour({ min: 5, sec: 0 });
+        setHour({ min: 0, sec: 5 });
         setCookies(null, Number(counts.count) + 1);
+        onOpen();
       } else {
-        // setCount(myCount + 1);
         clearInterval(id);
-        setHour({ min: 25, sec: 0 });
+        setHour({ min: 0, sec: 2 });
         setCookies(null, Number(counts.count) + 1);
+        onOpen();
       }
     }
   }, [prevTime]);
 
   useEffect(() => {
     setPrevTime(hour.min * 60 + hour.sec);
-    // setMyCookie(counts);
     setCounts(counts);
   }, [hour]);
 
@@ -63,7 +71,6 @@ export function Timer() {
 
   const start = () => {
     setId(setInterval(countDown, 1000));
-    getCookie();
   };
 
   const stop = () => {
@@ -109,6 +116,12 @@ export function Timer() {
 
   return (
     <Box>
+      <TimerModal
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        getCookie={getCookie}
+      />
       <Center>
         <Text fontSize="5xl" color="gray.600">
           {toTime(prevTime)}
