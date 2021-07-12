@@ -14,7 +14,7 @@ import { PieChart, Pie, Cell } from "recharts";
 import { TimerModal } from "./TimerModal";
 
 export function Timer() {
-  const [hour, setHour] = useState({ min: 0, sec: 2 });
+  const [hour, setHour] = useState({ min: 25, sec: 0 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
   const [id, setId] = useState();
   const [myCount, setCount] = useState(0);
@@ -38,12 +38,12 @@ export function Timer() {
       if (Number(counts.count) % 2 === 0) {
         setCount(Number(myCount) + 1);
         clearInterval(id);
-        setHour({ min: 0, sec: 5 });
+        setHour({ min: 5, sec: 0 });
         setCookies(null, Number(counts.count) + 1);
         onOpen();
       } else {
         clearInterval(id);
-        setHour({ min: 0, sec: 2 });
+        setHour({ min: 25, sec: 0 });
         setCookies(null, Number(counts.count) + 1);
         onOpen();
       }

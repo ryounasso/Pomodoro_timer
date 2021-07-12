@@ -17,7 +17,7 @@ export function TimerModal(props) {
   const getCookie = props.getCookie;
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <Center>
