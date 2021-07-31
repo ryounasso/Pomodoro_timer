@@ -39,7 +39,7 @@ export default function Home() {
   }
 
   function prepareCookie() {
-    if (!myCount.count || myCount.count === "NaN") {
+    if (!myCount.count || Nuber.isNaN(myCount.count)) {
       setCookies(null, 0);
     }
   }
