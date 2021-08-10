@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { countState } from "../pages/index";
 import { PieChart, Pie, Cell } from "recharts";
 import { TimerModal } from "./TimerModal";
+import Head from "next/head";
 
 export function Timer() {
   const [hour, setHour] = useState({ min: 25, sec: 0 });
@@ -116,6 +117,9 @@ export function Timer() {
 
   return (
     <Box>
+      <Head>
+        <title>{toTime(prevTime)}</title>
+      </Head>
       <TimerModal
         isOpen={isOpen}
         onOpen={onOpen}
