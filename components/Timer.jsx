@@ -23,6 +23,7 @@ export function Timer() {
   const [counts, setCounts] = useRecoilState(countState);
   const [isSet, setIsSet] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isOn, setIsOn] = useState(false);
 
   useEffect(() => {
     getCookie();
@@ -41,11 +42,13 @@ export function Timer() {
         clearInterval(id);
         setHour({ min: 5, sec: 0 });
         setCookies(null, Number(counts.count) + 1);
+        setIsOn(false);
         onOpen();
       } else {
         clearInterval(id);
         setHour({ min: 25, sec: 0 });
         setCookies(null, Number(counts.count) + 1);
+        setIsOn(false);
         onOpen();
       }
     }
@@ -72,10 +75,12 @@ export function Timer() {
 
   const start = () => {
     setId(setInterval(countDown, 1000));
+    setIsOn(true);
   };
 
   const stop = () => {
     clearInterval(id);
+    setIsOn(false);
   };
 
   const increment = () => {
@@ -160,12 +165,29 @@ export function Timer() {
         </VStack>
       </Center>
       <Center>
-        <Button m={4} bg="#1768AC" color="white" onClick={() => start()}>
-          Start
-        </Button>
-        <Button m={4} bg="#1768AC" color="white" onClick={() => stop()}>
-          Stop
-        </Button>
+        {isOn ? (
+          <Button
+            m={4}
+            bg="#1768AC"
+            color="white"
+            _hover={{ boxShadow: "md" }}
+            _active={{ boxShadow: "lg" }}
+            onClick={() => stop()}
+          >
+            Stop
+          </Button>
+        ) : (
+          <Button
+            m={4}
+            bg="#1768AC"
+            color="white"
+            _hover={{ boxShadow: "md" }}
+            _active={{ boxShadow: "lg" }}
+            onClick={() => start()}
+          >
+            Start
+          </Button>
+        )}
       </Center>
     </Box>
   );
