@@ -8,26 +8,27 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { parseCookies, setCookie } from "nookies";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { countState } from "../pages/index";
 import { PieChart, Pie, Cell } from "recharts";
 import { TimerModal } from "./TimerModal";
 import Head from "next/head";
+import { bgColorState } from "../store/bgColor";
 
 const focusTimes = [
-  { min: 0, sec: 5 },
   { min: 5, sec: 0 },
   { min: 25, sec: 0 },
   { min: 30, sec: 0 },
+  { min: 45, sec: 0 },
   { min: 50, sec: 0 },
 ];
 
 const breakTimes = [
-  { min: 0, sec: 3 },
   { min: 3, sec: 0 },
   { min: 5, sec: 0 },
   { min: 10, sec: 0 },
   { min: 15, sec: 0 },
+  { min: 30, sec: 0 },
 ];
 
 export function Timer() {
@@ -39,6 +40,7 @@ export function Timer() {
   const [counts, setCounts] = useRecoilState(countState);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isOn, setIsOn] = useState(false);
+  const setBgColor = useSetRecoilState(bgColorState);
 
   useEffect(() => {
     const cookie = getCookie();
@@ -70,6 +72,18 @@ export function Timer() {
   useEffect(() => {
     setPrevTime(hour.min * 60 + hour.sec);
   }, [hour]);
+
+  useEffect(() => {
+    if (isOn) {
+      if (Number(counts) % 2 === 0) {
+        setBgColor("#7abf82");
+      } else {
+        setBgColor("#7a95bf");
+      }
+    } else {
+      setBgColor("#F9F7F7");
+    }
+  }, [isOn]);
 
   const countDown = () => {
     setPrevTime(refHour.current - 1);
@@ -156,10 +170,10 @@ export function Timer() {
           {toTime(prevTime)}
         </Text>
         <Box m={4}>
-          <Button bg="#2541B2" color="white" m={2} onClick={() => increment()}>
+          <Button bg="#C8C6C6" color="black" m={2} onClick={() => increment()}>
             ▲
           </Button>
-          <Button bg="#2541B2" color="white" m={2} onClick={() => decriment()}>
+          <Button bg="#C8C6C6" color="black" m={2} onClick={() => decriment()}>
             ▼
           </Button>
         </Box>
@@ -190,7 +204,7 @@ export function Timer() {
         {isOn ? (
           <Button
             m={4}
-            bg="#1768AC"
+            bg="#4B6587"
             color="white"
             _hover={{ boxShadow: "md" }}
             _active={{ boxShadow: "lg" }}
@@ -201,7 +215,7 @@ export function Timer() {
         ) : (
           <Button
             m={4}
-            bg="#1768AC"
+            bg="#4B6587"
             color="white"
             _hover={{ boxShadow: "md" }}
             _active={{ boxShadow: "lg" }}
@@ -218,7 +232,9 @@ export function Timer() {
                 key={focusTime.min}
                 onClick={() => setTime(focusTime)}
                 mx={2}
-                bg="#d1e1ee"
+                bg="#C8C6C6"
+                color="black"
+                rounded="full"
               >
                 {focusTime.min}
               </Button>
@@ -228,7 +244,9 @@ export function Timer() {
                 key={breakTime.min}
                 onClick={() => setTime(breakTime)}
                 mx={2}
-                gb="#d1e1ee"
+                bg="#C8C6C6"
+                color="black"
+                rounded="full"
               >
                 {breakTime.min}
               </Button>
