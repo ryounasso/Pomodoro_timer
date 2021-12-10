@@ -30,19 +30,18 @@ export default function Home() {
 
   function getCookie(ctx) {
     const cookie = parseCookies(ctx);
-    setMyCount(cookie);
-    // setCookies(null, 0);
+    setMyCount(Number(cookie.count));
   }
 
   function setCookies(ctx, token) {
     setCookie(ctx, "count", token, { maxAge: 1 * 60 * 60 });
   }
 
-  function prepareCookie() {
-    if (!myCount.count || Nuber.isNaN(myCount.count)) {
+  const prepareCookie = () => {
+    if (!myCount.count || Number.isNaN(myCount.count)) {
       setCookies(null, 0);
     }
-  }
+  };
 
   return (
     <Box>
@@ -55,7 +54,7 @@ export default function Home() {
       </Center>
       <Center>
         {username === process.env.NEXT_PUBLIC_USERNAME ? (
-          <Link href="/main" onClick={prepareCookie()}>
+          <Link href="/main" onClick={prepareCookie}>
             Mainへ
           </Link>
         ) : (

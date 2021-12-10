@@ -14,6 +14,22 @@ import { PieChart, Pie, Cell } from "recharts";
 import { TimerModal } from "./TimerModal";
 import Head from "next/head";
 
+const focusTimes = [
+  { min: 0, sec: 5 },
+  { min: 5, sec: 0 },
+  { min: 25, sec: 0 },
+  { min: 30, sec: 0 },
+  { min: 50, sec: 0 },
+];
+
+const breakTimes = [
+  { min: 0, sec: 3 },
+  { min: 3, sec: 0 },
+  { min: 5, sec: 0 },
+  { min: 10, sec: 0 },
+  { min: 15, sec: 0 },
+];
+
 export function Timer() {
   const [hour, setHour] = useState({ min: 25, sec: 0 });
   const [prevTime, setPrevTime] = useState(hour.min * 60 + hour.sec);
@@ -21,33 +37,30 @@ export function Timer() {
   const [myCount, setCount] = useState(0);
   const refHour = useRef(prevTime);
   const [counts, setCounts] = useRecoilState(countState);
-  const [isSet, setIsSet] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isOn, setIsOn] = useState(false);
 
   useEffect(() => {
-    getCookie();
-    setIsSet(true);
+    const cookie = getCookie();
+    isEmpty(cookie) ? setCounts(0) : setCounts(Number(cookie.count));
   }, []);
-
-  useEffect(() => {
-    getCookie();
-  }, [isSet]);
 
   useEffect(() => {
     refHour.current = prevTime;
     if (refHour.current === 0) {
-      if (Number(counts.count) % 2 === 0) {
+      if (Number(counts) % 2 === 0) {
         setCount(Number(myCount) + 1);
         clearInterval(id);
         setHour({ min: 5, sec: 0 });
-        setCookies(null, Number(counts.count) + 1);
+        setCounts((prev) => prev + 1);
+        setCookies(null, counts + 1);
         setIsOn(false);
         onOpen();
       } else {
         clearInterval(id);
         setHour({ min: 25, sec: 0 });
-        setCookies(null, Number(counts.count) + 1);
+        setCounts((prev) => prev + 1);
+        setCookies(null, counts + 1);
         setIsOn(false);
         onOpen();
       }
@@ -56,7 +69,6 @@ export function Timer() {
 
   useEffect(() => {
     setPrevTime(hour.min * 60 + hour.sec);
-    setCounts(counts);
   }, [hour]);
 
   const countDown = () => {
@@ -93,13 +105,17 @@ export function Timer() {
 
   function getCookie(ctx) {
     const cookie = parseCookies(ctx);
-    setCounts(cookie);
+    return cookie;
   }
 
   function setCookies(ctx, token) {
     const date = setExpireDate();
     setCookie(ctx, "count", token, { expires: date });
   }
+
+  const isEmpty = (obj) => {
+    return !Object.keys(obj).length;
+  };
 
   function setExpireDate() {
     const currentTime = new Date();
@@ -113,12 +129,16 @@ export function Timer() {
     return tomorrowDate;
   }
 
+  const setTime = (time) => {
+    setHour(time);
+  };
+
   const data = [
-    { name: 0, value: parseInt(counts.count / 2) },
-    { name: 1, value: 18 - parseInt(counts.count / 2) },
+    { name: 0, value: parseInt(counts / 2) },
+    { name: 1, value: 18 - parseInt(counts / 2) },
   ];
 
-  const COLORS = ["#3D84B8", "white"];
+  const COLORS = ["#3D84B8", "#F9F7F7"];
 
   return (
     <Box>
@@ -159,8 +179,10 @@ export function Timer() {
               })}
             </Pie>
           </PieChart>
-          {counts.count === "NaN" ? null : (
-            <Text fontSize="3xl">{parseInt(counts.count / 2)}</Text>
+          {counts === void 0 ? (
+            <Text fontSize="3xl">テキスト</Text>
+          ) : (
+            <Text fontSize="3xl">{parseInt(counts / 2)}</Text>
           )}
         </VStack>
       </Center>
@@ -188,6 +210,29 @@ export function Timer() {
             Start
           </Button>
         )}
+      </Center>
+      <Center>
+        {Number(counts) % 2 === 0
+          ? focusTimes.map((focusTime) => (
+              <Button
+                key={focusTime.min}
+                onClick={() => setTime(focusTime)}
+                mx={2}
+                bg="#d1e1ee"
+              >
+                {focusTime.min}
+              </Button>
+            ))
+          : breakTimes.map((breakTime) => (
+              <Button
+                key={breakTime.min}
+                onClick={() => setTime(breakTime)}
+                mx={2}
+                gb="#d1e1ee"
+              >
+                {breakTime.min}
+              </Button>
+            ))}
       </Center>
     </Box>
   );
