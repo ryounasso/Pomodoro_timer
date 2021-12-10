@@ -2,7 +2,7 @@ import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { RecoilRoot } from "recoil";
 import { parseCookies } from "nookies";
-import { theme } from "./theme";
+import { theme } from "../styles/theme";
 
 function MyApp({ Component, pageProps, ctx }) {
   return (
